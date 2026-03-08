@@ -3,10 +3,7 @@ import { drizzle } from "drizzle-orm/d1";
 import app from "../index";
 import { users } from "../db/schema";
 import { createTestD1 } from "../test-helpers/d1-mock";
-import {
-  createAuthCookie,
-  getTestEnv,
-} from "../test-helpers/auth";
+import { createAuthCookie, getTestEnv } from "../test-helpers/auth";
 
 describe("アップロード presigned URL API", () => {
   const userId = "user-001";
@@ -27,30 +24,35 @@ describe("アップロード presigned URL API", () => {
   });
 
   it("認証なしは 401", async () => {
-    const res = await app.request("/uploads/presigned-url", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        files: [{ contentType: "image/jpeg" }],
-      }),
-    }, env);
+    const res = await app.request(
+      "/uploads/presigned-url",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          files: [{ contentType: "image/jpeg" }],
+        }),
+      },
+      env
+    );
     expect(res.status).toBe(401);
   });
 
   it("認証ありで files を送ると 200 と urls を返す", async () => {
-    const res = await app.request("/uploads/presigned-url", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Cookie: cookie,
+    const res = await app.request(
+      "/uploads/presigned-url",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: cookie,
+        },
+        body: JSON.stringify({
+          files: [{ contentType: "image/jpeg" }, { contentType: "image/png" }],
+        }),
       },
-      body: JSON.stringify({
-        files: [
-          { contentType: "image/jpeg" },
-          { contentType: "image/png" },
-        ],
-      }),
-    }, env);
+      env
+    );
     expect(res.status).toBe(200);
     const data = (await res.json()) as { urls: { key: string; url: string; expiresIn: number }[] };
     expect(data.urls).toHaveLength(2);
@@ -60,22 +62,30 @@ describe("アップロード presigned URL API", () => {
   });
 
   it("files が空なら 400", async () => {
-    const res = await app.request("/uploads/presigned-url", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Cookie: cookie },
-      body: JSON.stringify({ files: [] }),
-    }, env);
+    const res = await app.request(
+      "/uploads/presigned-url",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Cookie: cookie },
+        body: JSON.stringify({ files: [] }),
+      },
+      env
+    );
     expect(res.status).toBe(400);
   });
 
   it("許可外の contentType は 400", async () => {
-    const res = await app.request("/uploads/presigned-url", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Cookie: cookie },
-      body: JSON.stringify({
-        files: [{ contentType: "application/pdf" }],
-      }),
-    }, env);
+    const res = await app.request(
+      "/uploads/presigned-url",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Cookie: cookie },
+        body: JSON.stringify({
+          files: [{ contentType: "application/pdf" }],
+        }),
+      },
+      env
+    );
     expect(res.status).toBe(400);
   });
 });

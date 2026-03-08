@@ -22,24 +22,15 @@ type RepliesEnv = {
 async function checkPostAccess(
   db: ReturnType<typeof drizzle>,
   postId: string,
-  userId: string,
+  userId: string
 ): Promise<{ post: { groupId: string } } | null> {
-  const [post] = await db
-    .select()
-    .from(posts)
-    .where(eq(posts.id, postId))
-    .limit(1);
+  const [post] = await db.select().from(posts).where(eq(posts.id, postId)).limit(1);
   if (!post) return null;
 
   const [member] = await db
     .select()
     .from(groupMembers)
-    .where(
-      and(
-        eq(groupMembers.groupId, post.groupId),
-        eq(groupMembers.userId, userId),
-      ),
-    )
+    .where(and(eq(groupMembers.groupId, post.groupId), eq(groupMembers.userId, userId)))
     .limit(1);
   if (!member) return null;
 
@@ -54,6 +45,7 @@ export function createRepliesApp() {
   // GET / — リプライ一覧
   app.get("/", async (c) => {
     const postId = c.req.param("postId");
+    if (!postId) return c.json({ error: "Bad request" }, 400);
     const userId = c.get("userId");
     const db = drizzle(c.env.DB);
 
@@ -92,6 +84,7 @@ export function createRepliesApp() {
   // POST / — リプライ投稿
   app.post("/", zValidator("json", createReplySchema), async (c) => {
     const postId = c.req.param("postId");
+    if (!postId) return c.json({ error: "Bad request" }, 400);
     const userId = c.get("userId");
     const { body } = c.req.valid("json");
     const db = drizzle(c.env.DB);
@@ -130,7 +123,7 @@ export function createRepliesApp() {
           avatarUrl: user?.avatarUrl ?? null,
         },
       },
-      201,
+      201
     );
   });
 
@@ -138,6 +131,7 @@ export function createRepliesApp() {
   app.delete("/:replyId", async (c) => {
     const postId = c.req.param("postId");
     const replyId = c.req.param("replyId");
+    if (!postId || !replyId) return c.json({ error: "Bad request" }, 400);
     const userId = c.get("userId");
     const db = drizzle(c.env.DB);
 

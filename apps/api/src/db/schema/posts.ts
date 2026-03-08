@@ -19,9 +19,7 @@ export const posts = sqliteTable(
     takenAt: integer("taken_at", { mode: "number" }),
     createdAt: integer("created_at", { mode: "number" }).notNull(),
   },
-  (t) => [
-    index("posts_group_id_created_at_idx").on(t.groupId, t.createdAt),
-  ],
+  (t) => [index("posts_group_id_created_at_idx").on(t.groupId, t.createdAt)]
 );
 
 export type Post = typeof posts.$inferSelect;

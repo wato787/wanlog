@@ -63,11 +63,7 @@ export function createInvitationsApp() {
     const userId = c.get("userId");
     const db = drizzle(c.env.DB);
 
-    const [inv] = await db
-      .select()
-      .from(invitations)
-      .where(eq(invitations.token, token))
-      .limit(1);
+    const [inv] = await db.select().from(invitations).where(eq(invitations.token, token)).limit(1);
 
     if (!inv) {
       return c.json({ error: "Invitation not found" }, 404);
@@ -84,12 +80,7 @@ export function createInvitationsApp() {
     const [existing] = await db
       .select()
       .from(groupMembers)
-      .where(
-        and(
-          eq(groupMembers.groupId, inv.groupId),
-          eq(groupMembers.userId, userId),
-        ),
-      )
+      .where(and(eq(groupMembers.groupId, inv.groupId), eq(groupMembers.userId, userId)))
       .limit(1);
 
     if (existing) {
@@ -102,10 +93,7 @@ export function createInvitationsApp() {
       role: "member",
       joinedAt: now,
     });
-    await db
-      .update(invitations)
-      .set({ usedAt: now })
-      .where(eq(invitations.id, inv.id));
+    await db.update(invitations).set({ usedAt: now }).where(eq(invitations.id, inv.id));
 
     return c.json({ ok: true, groupId: inv.groupId }, 201);
   });

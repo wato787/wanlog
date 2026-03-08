@@ -3,10 +3,7 @@ import { drizzle } from "drizzle-orm/d1";
 import app from "../index";
 import { users } from "../db/schema";
 import { createTestD1 } from "../test-helpers/d1-mock";
-import {
-  createAuthCookie,
-  getTestEnv,
-} from "../test-helpers/auth";
+import { createAuthCookie, getTestEnv } from "../test-helpers/auth";
 
 describe("リプライAPI", () => {
   const userId = "user-001";
@@ -23,45 +20,59 @@ describe("リプライAPI", () => {
     cookie = await createAuthCookie(userId);
     otherCookie = await createAuthCookie(otherId);
     const now = Math.floor(Date.now() / 1000);
-    await drizzle(DB).insert(users).values([
-      { id: userId, lineId: "line-1", displayName: "User1", createdAt: now },
-      { id: otherId, lineId: "line-2", displayName: "User2", createdAt: now },
-    ]);
+    await drizzle(DB)
+      .insert(users)
+      .values([
+        { id: userId, lineId: "line-1", displayName: "User1", createdAt: now },
+        { id: otherId, lineId: "line-2", displayName: "User2", createdAt: now },
+      ]);
 
-    const createGroupRes = await app.request("/groups", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Cookie: cookie },
-      body: JSON.stringify({ name: "Group" }),
-    }, env);
-    groupId = (await createGroupRes.json() as { id: string }).id;
+    const createGroupRes = await app.request(
+      "/groups",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Cookie: cookie },
+        body: JSON.stringify({ name: "Group" }),
+      },
+      env
+    );
+    groupId = ((await createGroupRes.json()) as { id: string }).id;
 
-    const invRes = await app.request(`/groups/${groupId}/invitations`, {
-      method: "POST",
-      headers: { Cookie: cookie },
-    }, env);
-    const token = (await invRes.json() as { token: string }).token;
-    await app.request(`/invitations/${token}/join`, {
-      method: "POST",
-      headers: { Cookie: otherCookie },
-    }, env);
+    const invRes = await app.request(
+      `/groups/${groupId}/invitations`,
+      {
+        method: "POST",
+        headers: { Cookie: cookie },
+      },
+      env
+    );
+    const token = ((await invRes.json()) as { token: string }).token;
+    await app.request(
+      `/invitations/${token}/join`,
+      {
+        method: "POST",
+        headers: { Cookie: otherCookie },
+      },
+      env
+    );
 
-    const createPostRes = await app.request(`/groups/${groupId}/posts`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Cookie: cookie },
-      body: JSON.stringify({
-        media: [{ key: "x.jpg", mediaType: "photo" }],
-      }),
-    }, env);
-    postId = (await createPostRes.json() as { id: string }).id;
+    const createPostRes = await app.request(
+      `/groups/${groupId}/posts`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Cookie: cookie },
+        body: JSON.stringify({
+          media: [{ key: "x.jpg", mediaType: "photo" }],
+        }),
+      },
+      env
+    );
+    postId = ((await createPostRes.json()) as { id: string }).id;
   });
 
   describe("GET /groups/:groupId/posts/:postId/replies", () => {
     it("認証なしは 401", async () => {
-      const res = await app.request(
-        `/groups/${groupId}/posts/${postId}/replies`,
-        {},
-        env,
-      );
+      const res = await app.request(`/groups/${groupId}/posts/${postId}/replies`, {}, env);
       expect(res.status).toBe(401);
     });
 
@@ -69,7 +80,7 @@ describe("リプライAPI", () => {
       const res = await app.request(
         `/groups/${groupId}/posts/${postId}/replies`,
         { headers: { Cookie: cookie } },
-        env,
+        env
       );
       expect(res.status).toBe(200);
       const data = (await res.json()) as { replies: unknown[] };
@@ -80,7 +91,7 @@ describe("リプライAPI", () => {
       const res = await app.request(
         "/groups/other-group/posts/some-post/replies",
         { headers: { Cookie: cookie } },
-        env,
+        env
       );
       expect(res.status).toBe(404);
     });
@@ -95,10 +106,14 @@ describe("リプライAPI", () => {
           headers: { "Content-Type": "application/json", Cookie: cookie },
           body: JSON.stringify({ body: "Hello!" }),
         },
-        env,
+        env
       );
       expect(res.status).toBe(201);
-      const data = (await res.json()) as { id: string; body: string; author: { displayName: string } };
+      const data = (await res.json()) as {
+        id: string;
+        body: string;
+        author: { displayName: string };
+      };
       expect(data.body).toBe("Hello!");
       expect(data.author.displayName).toBe("User1");
     });
@@ -111,7 +126,7 @@ describe("リプライAPI", () => {
           headers: { "Content-Type": "application/json", Cookie: cookie },
           body: JSON.stringify({ body: "" }),
         },
-        env,
+        env
       );
       expect(res.status).toBe(400);
     });
@@ -126,21 +141,21 @@ describe("リプライAPI", () => {
           headers: { "Content-Type": "application/json", Cookie: cookie },
           body: JSON.stringify({ body: "Bye" }),
         },
-        env,
+        env
       );
-      const replyId = (await createRes.json() as { id: string }).id;
+      const replyId = ((await createRes.json()) as { id: string }).id;
 
       const res = await app.request(
         `/groups/${groupId}/posts/${postId}/replies/${replyId}`,
         { method: "DELETE", headers: { Cookie: cookie } },
-        env,
+        env
       );
       expect(res.status).toBe(200);
 
       const listRes = await app.request(
         `/groups/${groupId}/posts/${postId}/replies`,
         { headers: { Cookie: cookie } },
-        env,
+        env
       );
       const data = (await listRes.json()) as { replies: unknown[] };
       expect(data.replies).toHaveLength(0);
@@ -154,14 +169,14 @@ describe("リプライAPI", () => {
           headers: { "Content-Type": "application/json", Cookie: otherCookie },
           body: JSON.stringify({ body: "Other reply" }),
         },
-        env,
+        env
       );
-      const replyId = (await createRes.json() as { id: string }).id;
+      const replyId = ((await createRes.json()) as { id: string }).id;
 
       const res = await app.request(
         `/groups/${groupId}/posts/${postId}/replies/${replyId}`,
         { method: "DELETE", headers: { Cookie: cookie } },
-        env,
+        env
       );
       expect(res.status).toBe(403);
     });

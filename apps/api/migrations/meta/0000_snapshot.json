@@ -60,9 +60,7 @@
       "indexes": {
         "dogs_group_id_idx": {
           "name": "dogs_group_id_idx",
-          "columns": [
-            "group_id"
-          ],
+          "columns": ["group_id"],
           "isUnique": false
         }
       },
@@ -71,12 +69,8 @@
           "name": "dogs_group_id_groups_id_fk",
           "tableFrom": "dogs",
           "tableTo": "groups",
-          "columnsFrom": [
-            "group_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["group_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -121,9 +115,7 @@
       "indexes": {
         "group_members_user_id_idx": {
           "name": "group_members_user_id_idx",
-          "columns": [
-            "user_id"
-          ],
+          "columns": ["user_id"],
           "isUnique": false
         }
       },
@@ -132,12 +124,8 @@
           "name": "group_members_group_id_groups_id_fk",
           "tableFrom": "group_members",
           "tableTo": "groups",
-          "columnsFrom": [
-            "group_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["group_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -145,22 +133,15 @@
           "name": "group_members_user_id_users_id_fk",
           "tableFrom": "group_members",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
         "group_members_group_id_user_id_pk": {
-          "columns": [
-            "group_id",
-            "user_id"
-          ],
+          "columns": ["group_id", "user_id"],
           "name": "group_members_group_id_user_id_pk"
         }
       },
@@ -247,16 +228,12 @@
       "indexes": {
         "invitations_token_unique": {
           "name": "invitations_token_unique",
-          "columns": [
-            "token"
-          ],
+          "columns": ["token"],
           "isUnique": true
         },
         "invitations_token_idx": {
           "name": "invitations_token_idx",
-          "columns": [
-            "token"
-          ],
+          "columns": ["token"],
           "isUnique": true
         }
       },
@@ -265,12 +242,8 @@
           "name": "invitations_group_id_groups_id_fk",
           "tableFrom": "invitations",
           "tableTo": "groups",
-          "columnsFrom": [
-            "group_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["group_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -328,10 +301,7 @@
       "indexes": {
         "post_media_post_id_order_idx": {
           "name": "post_media_post_id_order_idx",
-          "columns": [
-            "post_id",
-            "order"
-          ],
+          "columns": ["post_id", "order"],
           "isUnique": false
         }
       },
@@ -340,12 +310,8 @@
           "name": "post_media_post_id_posts_id_fk",
           "tableFrom": "post_media",
           "tableTo": "posts",
-          "columnsFrom": [
-            "post_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["post_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -403,10 +369,7 @@
       "indexes": {
         "posts_group_id_created_at_idx": {
           "name": "posts_group_id_created_at_idx",
-          "columns": [
-            "group_id",
-            "created_at"
-          ],
+          "columns": ["group_id", "created_at"],
           "isUnique": false
         }
       },
@@ -415,12 +378,8 @@
           "name": "posts_group_id_groups_id_fk",
           "tableFrom": "posts",
           "tableTo": "groups",
-          "columnsFrom": [
-            "group_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["group_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -428,12 +387,8 @@
           "name": "posts_user_id_users_id_fk",
           "tableFrom": "posts",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -484,9 +439,7 @@
       "indexes": {
         "replies_post_id_idx": {
           "name": "replies_post_id_idx",
-          "columns": [
-            "post_id"
-          ],
+          "columns": ["post_id"],
           "isUnique": false
         }
       },
@@ -495,12 +448,8 @@
           "name": "replies_post_id_posts_id_fk",
           "tableFrom": "replies",
           "tableTo": "posts",
-          "columnsFrom": [
-            "post_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["post_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -508,12 +457,8 @@
           "name": "replies_user_id_users_id_fk",
           "tableFrom": "replies",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -564,16 +509,12 @@
       "indexes": {
         "users_line_id_unique": {
           "name": "users_line_id_unique",
-          "columns": [
-            "line_id"
-          ],
+          "columns": ["line_id"],
           "isUnique": true
         },
         "users_line_id_idx": {
           "name": "users_line_id_idx",
-          "columns": [
-            "line_id"
-          ],
+          "columns": ["line_id"],
           "isUnique": false
         }
       },

@@ -7,12 +7,7 @@ import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
 import { uuidv7 } from "uuidv7";
-import {
-  groups,
-  groupMembers,
-  users,
-  invitations,
-} from "../db/schema";
+import { groups, groupMembers, users, invitations } from "../db/schema";
 import { requireAuth } from "../middleware/auth";
 import { createPostsApp } from "./posts";
 
@@ -63,23 +58,14 @@ export function createGroupsApp() {
     const [member] = await db
       .select()
       .from(groupMembers)
-      .where(
-        and(
-          eq(groupMembers.groupId, groupId),
-          eq(groupMembers.userId, userId),
-        ),
-      )
+      .where(and(eq(groupMembers.groupId, groupId), eq(groupMembers.userId, userId)))
       .limit(1);
 
     if (!member) {
       return c.json({ error: "Forbidden" }, 403);
     }
 
-    const [group] = await db
-      .select()
-      .from(groups)
-      .where(eq(groups.id, groupId))
-      .limit(1);
+    const [group] = await db.select().from(groups).where(eq(groups.id, groupId)).limit(1);
 
     if (!group) {
       return c.json({ error: "Not found" }, 404);
@@ -102,32 +88,20 @@ export function createGroupsApp() {
     const [member] = await db
       .select()
       .from(groupMembers)
-      .where(
-        and(
-          eq(groupMembers.groupId, groupId),
-          eq(groupMembers.userId, userId),
-        ),
-      )
+      .where(and(eq(groupMembers.groupId, groupId), eq(groupMembers.userId, userId)))
       .limit(1);
 
     if (!member || member.role !== "owner") {
       return c.json({ error: "Forbidden" }, 403);
     }
 
-    const [group] = await db
-      .select()
-      .from(groups)
-      .where(eq(groups.id, groupId))
-      .limit(1);
+    const [group] = await db.select().from(groups).where(eq(groups.id, groupId)).limit(1);
 
     if (!group) {
       return c.json({ error: "Not found" }, 404);
     }
 
-    await db
-      .update(groups)
-      .set({ name })
-      .where(eq(groups.id, groupId));
+    await db.update(groups).set({ name }).where(eq(groups.id, groupId));
 
     return c.json({ id: group.id, name, createdAt: group.createdAt });
   });
@@ -141,12 +115,7 @@ export function createGroupsApp() {
     const [myMember] = await db
       .select()
       .from(groupMembers)
-      .where(
-        and(
-          eq(groupMembers.groupId, groupId),
-          eq(groupMembers.userId, userId),
-        ),
-      )
+      .where(and(eq(groupMembers.groupId, groupId), eq(groupMembers.userId, userId)))
       .limit(1);
 
     if (!myMember) {
@@ -182,12 +151,7 @@ export function createGroupsApp() {
     const [ownerMember] = await db
       .select()
       .from(groupMembers)
-      .where(
-        and(
-          eq(groupMembers.groupId, groupId),
-          eq(groupMembers.userId, userId),
-        ),
-      )
+      .where(and(eq(groupMembers.groupId, groupId), eq(groupMembers.userId, userId)))
       .limit(1);
 
     if (!ownerMember || ownerMember.role !== "owner") {
@@ -197,12 +161,7 @@ export function createGroupsApp() {
     const [target] = await db
       .select()
       .from(groupMembers)
-      .where(
-        and(
-          eq(groupMembers.groupId, groupId),
-          eq(groupMembers.userId, targetUserId),
-        ),
-      )
+      .where(and(eq(groupMembers.groupId, groupId), eq(groupMembers.userId, targetUserId)))
       .limit(1);
 
     if (!target) {
@@ -211,12 +170,7 @@ export function createGroupsApp() {
 
     await db
       .delete(groupMembers)
-      .where(
-        and(
-          eq(groupMembers.groupId, groupId),
-          eq(groupMembers.userId, targetUserId),
-        ),
-      );
+      .where(and(eq(groupMembers.groupId, groupId), eq(groupMembers.userId, targetUserId)));
 
     return c.json({ ok: true });
   });
@@ -230,23 +184,14 @@ export function createGroupsApp() {
     const [member] = await db
       .select()
       .from(groupMembers)
-      .where(
-        and(
-          eq(groupMembers.groupId, groupId),
-          eq(groupMembers.userId, userId),
-        ),
-      )
+      .where(and(eq(groupMembers.groupId, groupId), eq(groupMembers.userId, userId)))
       .limit(1);
 
     if (!member || member.role !== "owner") {
       return c.json({ error: "Forbidden" }, 403);
     }
 
-    const [group] = await db
-      .select()
-      .from(groups)
-      .where(eq(groups.id, groupId))
-      .limit(1);
+    const [group] = await db.select().from(groups).where(eq(groups.id, groupId)).limit(1);
 
     if (!group) {
       return c.json({ error: "Not found" }, 404);
@@ -265,10 +210,7 @@ export function createGroupsApp() {
       createdAt: now,
     });
 
-    return c.json(
-      { id, token, groupId, expiresAt },
-      201,
-    );
+    return c.json({ id, token, groupId, expiresAt }, 201);
   });
 
   app.route("/:groupId/posts", createPostsApp());

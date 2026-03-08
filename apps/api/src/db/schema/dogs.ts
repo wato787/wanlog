@@ -17,7 +17,7 @@ export const dogs = sqliteTable(
     iconUrl: text("icon_url"),
     createdAt: integer("created_at", { mode: "number" }).notNull(),
   },
-  (t) => [index("dogs_group_id_idx").on(t.groupId)],
+  (t) => [index("dogs_group_id_idx").on(t.groupId)]
 );
 
 export type Dog = typeof dogs.$inferSelect;

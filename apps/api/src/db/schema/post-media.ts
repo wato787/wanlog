@@ -16,7 +16,7 @@ export const postMedia = sqliteTable(
     order: integer("order", { mode: "number" }).notNull(),
     createdAt: integer("created_at", { mode: "number" }).notNull(),
   },
-  (t) => [index("post_media_post_id_order_idx").on(t.postId, t.order)],
+  (t) => [index("post_media_post_id_order_idx").on(t.postId, t.order)]
 );
 
 export type PostMedia = typeof postMedia.$inferSelect;

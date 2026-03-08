@@ -8,11 +8,7 @@ const JWT_SECRET = "test-secret";
 
 export async function createAuthCookie(userId: string): Promise<string> {
   const now = Math.floor(Date.now() / 1000);
-  const token = await sign(
-    { sub: userId, iat: now, exp: now + 3600 },
-    JWT_SECRET,
-    "HS256",
-  );
+  const token = await sign({ sub: userId, iat: now, exp: now + 3600 }, JWT_SECRET, "HS256");
   return `${COOKIE_NAME}=${token}`;
 }
 

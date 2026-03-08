@@ -27,15 +27,13 @@ export function createTestD1(): D1Database {
   const db = new Database(":memory:");
   runMigrations(db);
 
-  return {
-    prepare(sql: string): D1PreparedStatement {
+  const d1 = {
+    prepare(sql: string) {
       const stmt = db.prepare(sql);
       return {
         bind(...params: unknown[]) {
-          const run = () =>
-            Promise.resolve(stmt.run(...params) as D1RunResult);
-          const all = () =>
-            Promise.resolve({ results: stmt.all(...params) as D1Result[] });
+          const run = () => Promise.resolve(stmt.run(...params));
+          const all = () => Promise.resolve({ results: stmt.all(...params) as D1Result[] });
           const first = () => {
             const rows = stmt.all(...params) as D1Result[];
             return Promise.resolve(rows[0] ?? null);
@@ -43,9 +41,7 @@ export function createTestD1(): D1Database {
           const raw = () => {
             const rows = stmt.all(...params) as Record<string, unknown>[];
             const columns = stmt.columns().map((c) => c.name);
-            return Promise.resolve(
-              rows.map((row) => columns.map((col) => row[col])),
-            );
+            return Promise.resolve(rows.map((row) => columns.map((col) => row[col])));
           };
           return { run, all, first, raw };
         },
@@ -55,16 +51,15 @@ export function createTestD1(): D1Database {
       statements: Array<{
         run?: () => Promise<unknown>;
         all?: () => Promise<{ results: unknown[] }>;
-      }>,
+      }>
     ) {
       return Promise.all(
-        statements.map((s) =>
-          s.all ? s.all() : (s as { run: () => Promise<unknown> }).run(),
-        ),
+        statements.map((s) => (s.all ? s.all() : (s as { run: () => Promise<unknown> }).run()))
       );
     },
     exec() {
       return Promise.resolve({ count: 0, duration: 0 });
     },
-  } as D1Database;
+  };
+  return d1 as unknown as D1Database;
 }

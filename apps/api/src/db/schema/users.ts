@@ -12,7 +12,7 @@ export const users = sqliteTable(
     avatarUrl: text("avatar_url"),
     createdAt: integer("created_at", { mode: "number" }).notNull(),
   },
-  (t) => [index("users_line_id_idx").on(t.lineId)],
+  (t) => [index("users_line_id_idx").on(t.lineId)]
 );
 
 export type User = typeof users.$inferSelect;

@@ -16,7 +16,7 @@ export const invitations = sqliteTable(
     usedAt: integer("used_at", { mode: "number" }),
     createdAt: integer("created_at", { mode: "number" }).notNull(),
   },
-  (t) => [index("invitations_token_idx").on(t.token)],
+  (t) => [index("invitations_token_idx").on(t.token)]
 );
 
 export type Invitation = typeof invitations.$inferSelect;

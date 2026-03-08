@@ -7,13 +7,7 @@ import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
 import { uuidv7 } from "uuidv7";
-import {
-  posts,
-  postMedia,
-  groupMembers,
-  users,
-  replies,
-} from "../db/schema";
+import { posts, postMedia, groupMembers, users, replies } from "../db/schema";
 import { requireAuth } from "../middleware/auth";
 import { createRepliesApp } from "./replies";
 
@@ -28,7 +22,7 @@ const createPostSchema = z.object({
       z.object({
         key: z.string().min(1).max(500),
         mediaType: z.enum(["photo", "video"]),
-      }),
+      })
     )
     .min(1)
     .max(10),
@@ -52,6 +46,7 @@ export function createPostsApp() {
   // POST / — 投稿作成（post_media も同時作成）
   app.post("/", zValidator("json", createPostSchema), async (c) => {
     const groupId = c.req.param("groupId");
+    if (!groupId) return c.json({ error: "Bad request" }, 400);
     const userId = c.get("userId");
     const { caption, takenAt, media } = c.req.valid("json");
     const db = drizzle(c.env.DB);
@@ -59,12 +54,7 @@ export function createPostsApp() {
     const [member] = await db
       .select()
       .from(groupMembers)
-      .where(
-        and(
-          eq(groupMembers.groupId, groupId),
-          eq(groupMembers.userId, userId),
-        ),
-      )
+      .where(and(eq(groupMembers.groupId, groupId), eq(groupMembers.userId, userId)))
       .limit(1);
 
     if (!member) {
@@ -94,11 +84,7 @@ export function createPostsApp() {
       });
     }
 
-    const [created] = await db
-      .select()
-      .from(posts)
-      .where(eq(posts.id, postId))
-      .limit(1);
+    const [created] = await db.select().from(posts).where(eq(posts.id, postId)).limit(1);
 
     const mediaRows = await db
       .select()
@@ -121,13 +107,14 @@ export function createPostsApp() {
           order: m.order,
         })),
       },
-      201,
+      201
     );
   });
 
   // GET / — タイムライン（cursor-based pagination）
   app.get("/", zValidator("query", listPostsSchema), async (c) => {
     const groupId = c.req.param("groupId");
+    if (!groupId) return c.json({ error: "Bad request" }, 400);
     const userId = c.get("userId");
     const { cursor, limit = DEFAULT_LIMIT } = c.req.valid("query");
     const db = drizzle(c.env.DB);
@@ -135,12 +122,7 @@ export function createPostsApp() {
     const [member] = await db
       .select()
       .from(groupMembers)
-      .where(
-        and(
-          eq(groupMembers.groupId, groupId),
-          eq(groupMembers.userId, userId),
-        ),
-      )
+      .where(and(eq(groupMembers.groupId, groupId), eq(groupMembers.userId, userId)))
       .limit(1);
 
     if (!member) {
@@ -237,18 +219,14 @@ export function createPostsApp() {
   app.get("/:postId", async (c) => {
     const groupId = c.req.param("groupId");
     const postId = c.req.param("postId");
+    if (!groupId || !postId) return c.json({ error: "Bad request" }, 400);
     const userId = c.get("userId");
     const db = drizzle(c.env.DB);
 
     const [member] = await db
       .select()
       .from(groupMembers)
-      .where(
-        and(
-          eq(groupMembers.groupId, groupId),
-          eq(groupMembers.userId, userId),
-        ),
-      )
+      .where(and(eq(groupMembers.groupId, groupId), eq(groupMembers.userId, userId)))
       .limit(1);
 
     if (!member) {
@@ -308,6 +286,7 @@ export function createPostsApp() {
   app.delete("/:postId", async (c) => {
     const groupId = c.req.param("groupId");
     const postId = c.req.param("postId");
+    if (!groupId || !postId) return c.json({ error: "Bad request" }, 400);
     const userId = c.get("userId");
     const db = drizzle(c.env.DB);
 

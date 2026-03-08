@@ -1,13 +1,7 @@
 /**
  * group_members テーブル
  */
-import {
-  index,
-  integer,
-  primaryKey,
-  sqliteTable,
-  text,
-} from "drizzle-orm/sqlite-core";
+import { index, integer, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { groups } from "./groups";
 import { users } from "./users";
 
@@ -28,7 +22,7 @@ export const groupMembers = sqliteTable(
   (t) => [
     primaryKey({ columns: [t.groupId, t.userId] }),
     index("group_members_user_id_idx").on(t.userId),
-  ],
+  ]
 );
 
 export type GroupMember = typeof groupMembers.$inferSelect;

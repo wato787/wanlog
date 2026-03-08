@@ -18,7 +18,7 @@ export const replies = sqliteTable(
     body: text("body").notNull(),
     createdAt: integer("created_at", { mode: "number" }).notNull(),
   },
-  (t) => [index("replies_post_id_idx").on(t.postId)],
+  (t) => [index("replies_post_id_idx").on(t.postId)]
 );
 
 export type Reply = typeof replies.$inferSelect;

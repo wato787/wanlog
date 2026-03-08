@@ -11,12 +11,7 @@ import { requireAuth } from "../middleware/auth";
 const PRESIGNED_EXPIRES_SEC = 3600; // 1時間
 const MAX_FILES = 10;
 
-const ALLOWED_CONTENT_TYPES = [
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-  "video/mp4",
-] as const;
+const ALLOWED_CONTENT_TYPES = ["image/jpeg", "image/png", "image/webp", "video/mp4"] as const;
 
 const EXT_BY_CONTENT_TYPE: Record<string, string> = {
   "image/jpeg": "jpg",
@@ -30,7 +25,7 @@ const requestSchema = z.object({
     .array(
       z.object({
         contentType: z.enum(ALLOWED_CONTENT_TYPES),
-      }),
+      })
     )
     .min(1)
     .max(MAX_FILES),
@@ -54,51 +49,46 @@ export function createUploadsApp() {
   app.use("/*", requireAuth);
 
   // POST /uploads/presigned-url — 複数ファイル用 presigned PUT URL 発行
-  app.post(
-    "/presigned-url",
-    zValidator("json", requestSchema),
-    async (c) => {
-      const userId = c.get("userId");
-      const { files } = c.req.valid("json");
-      const {
-        R2_ACCESS_KEY_ID,
-        R2_SECRET_ACCESS_KEY,
-        R2_ACCOUNT_ID,
-        R2_BUCKET_NAME = DEFAULT_BUCKET_NAME,
-      } = c.env;
+  app.post("/presigned-url", zValidator("json", requestSchema), async (c) => {
+    const userId = c.get("userId");
+    const { files } = c.req.valid("json");
+    const {
+      R2_ACCESS_KEY_ID,
+      R2_SECRET_ACCESS_KEY,
+      R2_ACCOUNT_ID,
+      R2_BUCKET_NAME = DEFAULT_BUCKET_NAME,
+    } = c.env;
 
-      const client = new AwsClient({
-        accessKeyId: R2_ACCESS_KEY_ID,
-        secretAccessKey: R2_SECRET_ACCESS_KEY,
-        service: "s3",
-        region: "auto",
+    const client = new AwsClient({
+      accessKeyId: R2_ACCESS_KEY_ID,
+      secretAccessKey: R2_SECRET_ACCESS_KEY,
+      service: "s3",
+      region: "auto",
+    });
+
+    const r2Url = `https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com`;
+    const bucket = R2_BUCKET_NAME;
+
+    const urls: { key: string; url: string; expiresIn: number }[] = [];
+
+    for (const f of files) {
+      const ext = EXT_BY_CONTENT_TYPE[f.contentType] ?? "bin";
+      const key = `uploads/${userId}/${uuidv7()}.${ext}`;
+      const objectUrl = `${r2Url}/${bucket}/${key}?X-Amz-Expires=${PRESIGNED_EXPIRES_SEC}`;
+
+      const signedRequest = await client.sign(new Request(objectUrl, { method: "PUT" }), {
+        aws: { signQuery: true },
       });
 
-      const r2Url = `https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com`;
-      const bucket = R2_BUCKET_NAME;
+      urls.push({
+        key,
+        url: String(signedRequest.url),
+        expiresIn: PRESIGNED_EXPIRES_SEC,
+      });
+    }
 
-      const urls: { key: string; url: string; expiresIn: number }[] = [];
-
-      for (const f of files) {
-        const ext = EXT_BY_CONTENT_TYPE[f.contentType] ?? "bin";
-        const key = `uploads/${userId}/${uuidv7()}.${ext}`;
-        const objectUrl = `${r2Url}/${bucket}/${key}?X-Amz-Expires=${PRESIGNED_EXPIRES_SEC}`;
-
-        const signedRequest = await client.sign(
-          new Request(objectUrl, { method: "PUT" }),
-          { aws: { signQuery: true } },
-        );
-
-        urls.push({
-          key,
-          url: String(signedRequest.url),
-          expiresIn: PRESIGNED_EXPIRES_SEC,
-        });
-      }
-
-      return c.json({ urls });
-    },
-  );
+    return c.json({ urls });
+  });
 
   return app;
 }
