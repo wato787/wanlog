@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "96cd9d16-6f54-4b07-a916-bd84fbe9c2c9",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "d36d3cc1-7ec8-42a8-9424-b98d61dada34",
+  "prevId": "96cd9d16-6f54-4b07-a916-bd84fbe9c2c9",
   "tables": {
     "dogs": {
       "name": "dogs",
@@ -257,7 +257,7 @@
           "columns": [
             "token"
           ],
-          "isUnique": true
+          "isUnique": false
         }
       },
       "foreignKeys": {

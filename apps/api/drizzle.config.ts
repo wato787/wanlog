@@ -1,7 +1,7 @@
 import { defineConfig } from "drizzle-kit";
 
 export default defineConfig({
-  schema: "./src/db/schema.ts",
+  schema: "./src/db/schema",
   out: "./migrations",
   dialect: "sqlite",
   // 本番・リモート用は d1-http と CLOUDFLARE_* を .dev.vars に設定後に追加
