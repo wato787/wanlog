@@ -1,0 +1,14 @@
+name = "wanlog-api"
+main = "src/index.ts"
+compatibility_date = "2026-03-08"
+
+# D1（SQLite）
+[[d1_databases]]
+binding = "DB"
+database_name = "wanlog-db"
+database_id = ""  # wrangler d1 create wanlog-db で作成後、ここに ID を設定
+
+# R2（画像・動画ストレージ）
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "wanlog-media"
