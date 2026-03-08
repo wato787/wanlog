@@ -1,0 +1,4 @@
+# Cloudflare Pages（静的サイト）
+# デプロイ: wrangler pages deploy dist --project-name=wanlog-web
+name = "wanlog-web"
+pages_build_output_dir = "dist"

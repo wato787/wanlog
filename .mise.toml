@@ -41,3 +41,8 @@ run = "bun run db:generate"
 description = "ローカル D1 にマイグレーション適用"
 dir = "apps/api"
 run = "bun run db:migrate:local"
+
+[tasks."deploy:web"]
+description = "Web を Cloudflare Pages にデプロイ"
+dir = "apps/web"
+run = "bun run build && bun run deploy"
