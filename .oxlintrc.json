@@ -4,5 +4,5 @@
     "correctness": "warn",
     "suspicious": "warn"
   },
-  "ignorePatterns": ["node_modules", "dist", "build", ".wrangler", "*.config.js", "*.config.ts"]
+  "ignorePatterns": ["node_modules", "dist", "build", ".wrangler", "*.config.js", "*.config.ts", "**/routeTree.gen.ts"]
 }
