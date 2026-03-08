@@ -13,3 +13,11 @@ run = "bun run dev"
 description = "Web (Vite) 開発サーバー"
 dir = "apps/web"
 run = "bun run dev"
+
+[tasks.lint]
+description = "oxlint でリント"
+run = "bunx oxlint ."
+
+[tasks.format]
+description = "oxfmt でフォーマット"
+run = "bunx oxfmt ."

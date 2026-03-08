@@ -1,0 +1,8 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oxc-project/oxc/main/crates/oxlint/configuration_schema.json",
+  "categories": {
+    "correctness": "warn",
+    "suspicious": "warn"
+  },
+  "ignorePatterns": ["node_modules", "dist", "build", ".wrangler", "*.config.js", "*.config.ts"]
+}
