@@ -10,6 +10,7 @@ import { uuidv7 } from "uuidv7";
 import { groups, groupMembers, users, invitations } from "../db/schema";
 import { requireAuth } from "../middleware/auth";
 import { createPostsApp } from "./posts";
+import { createDogsApp } from "./dogs";
 
 const INVITATION_EXPIRES_DAYS = 7;
 
@@ -214,6 +215,7 @@ export function createGroupsApp() {
   });
 
   app.route("/:groupId/posts", createPostsApp());
+  app.route("/:groupId/dogs", createDogsApp());
 
   return app;
 }
