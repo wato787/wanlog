@@ -15,6 +15,7 @@ import {
   replies,
 } from "../db/schema";
 import { requireAuth } from "../middleware/auth";
+import { createRepliesApp } from "./replies";
 
 const DEFAULT_LIMIT = 20;
 const MAX_LIMIT = 50;
@@ -330,6 +331,8 @@ export function createPostsApp() {
 
     return c.json({ ok: true });
   });
+
+  app.route("/:postId/replies", createRepliesApp());
 
   return app;
 }
