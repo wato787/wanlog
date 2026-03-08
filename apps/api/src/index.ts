@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { createAuthApp } from "./auth";
 import { createGroupsApp } from "./routes/groups";
 import { createInvitationsApp } from "./routes/invitations";
+import { createUploadsApp } from "./routes/uploads";
 
 export type Bindings = {
   DB: D1Database;
@@ -11,6 +12,10 @@ export type Bindings = {
   JWT_SECRET: string;
   API_ORIGIN: string;
   FRONTEND_ORIGIN: string;
+  R2_ACCESS_KEY_ID: string;
+  R2_SECRET_ACCESS_KEY: string;
+  R2_ACCOUNT_ID: string;
+  R2_BUCKET_NAME?: string;
 };
 
 export type Variables = { userId: string };
@@ -24,5 +29,6 @@ app.get("/", (c) => {
 app.route("/", createAuthApp());
 app.route("/groups", createGroupsApp());
 app.route("/invitations", createInvitationsApp());
+app.route("/uploads", createUploadsApp());
 
 export default app;

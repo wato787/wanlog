@@ -25,5 +25,9 @@ export function getTestEnv(DB: D1Database) {
     JWT_SECRET,
     API_ORIGIN: "http://localhost:8787",
     FRONTEND_ORIGIN: "http://localhost:5173",
+    R2_ACCESS_KEY_ID: "test",
+    R2_SECRET_ACCESS_KEY: "test",
+    R2_ACCOUNT_ID: "test",
+    R2_BUCKET_NAME: "wanlog-media",
   };
 }
