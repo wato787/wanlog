@@ -1,5 +1,7 @@
 import { Hono } from "hono";
 import { createAuthApp } from "./auth";
+import { createGroupsApp } from "./routes/groups";
+import { createInvitationsApp } from "./routes/invitations";
 
 export type Bindings = {
   DB: D1Database;
@@ -11,12 +13,16 @@ export type Bindings = {
   FRONTEND_ORIGIN: string;
 };
 
-const app = new Hono<{ Bindings: Bindings }>();
+export type Variables = { userId: string };
+
+const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
 
 app.get("/", (c) => {
   return c.text("Hello Hono!");
 });
 
 app.route("/", createAuthApp());
+app.route("/groups", createGroupsApp());
+app.route("/invitations", createInvitationsApp());
 
 export default app;
