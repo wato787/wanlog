@@ -4,6 +4,11 @@ import app from "./index";
 const mockEnv = {
   DB: {} as D1Database,
   BUCKET: {} as R2Bucket,
+  LINE_CHANNEL_ID: "test",
+  LINE_CHANNEL_SECRET: "test",
+  JWT_SECRET: "test-secret",
+  API_ORIGIN: "http://localhost:8787",
+  FRONTEND_ORIGIN: "http://localhost:5173",
 };
 
 describe("API", () => {

@@ -1,0 +1,8 @@
+# ローカル開発用。コピーして .dev.vars を作成し値を設定すること。
+# .dev.vars は git に含めない。
+
+LINE_CHANNEL_ID=
+LINE_CHANNEL_SECRET=
+JWT_SECRET=
+API_ORIGIN=http://localhost:8787
+FRONTEND_ORIGIN=http://localhost:5173
