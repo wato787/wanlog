@@ -31,3 +31,13 @@ run = "bun run test"
 description = "Web のテスト実行"
 dir = "apps/web"
 run = "bun run test"
+
+[tasks."db:generate"]
+description = "Drizzle マイグレーション生成"
+dir = "apps/api"
+run = "bun run db:generate"
+
+[tasks."db:migrate:local"]
+description = "ローカル D1 にマイグレーション適用"
+dir = "apps/api"
+run = "bun run db:migrate:local"

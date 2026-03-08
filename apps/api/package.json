@@ -5,14 +5,18 @@
     "dev": "wrangler dev",
     "deploy": "wrangler deploy --minify",
     "cf-typegen": "wrangler types --env-interface CloudflareBindings",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate:local": "wrangler d1 migrations apply wanlog-db --local",
     "test": "vitest run",
     "test:watch": "vitest"
   },
   "dependencies": {
+    "drizzle-orm": "^0.45.1",
     "hono": "^4.12.5"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260307.1",
+    "drizzle-kit": "^0.31.9",
     "vitest": "^4.0.18",
     "wrangler": "^4.71.0"
   }

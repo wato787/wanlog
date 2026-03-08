@@ -7,6 +7,7 @@ compatibility_date = "2026-03-08"
 binding = "DB"
 database_name = "wanlog-db"
 database_id = "" # wrangler d1 create wanlog-db で作成後、ここに ID を設定
+migrations_dir = "migrations"
 
 # R2（画像・動画ストレージ）
 [[r2_buckets]]
