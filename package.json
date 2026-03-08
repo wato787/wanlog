@@ -1,0 +1,8 @@
+{
+  "name": "wanlog",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}
