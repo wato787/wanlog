@@ -1,0 +1,11 @@
+/* CSS Modules 動作確認用 */
+.card {
+  padding: 2em;
+  border-radius: 8px;
+  background: rgba(100, 108, 255, 0.08);
+}
+
+.title {
+  margin: 0 0 0.5em;
+  font-size: 1.5rem;
+}
