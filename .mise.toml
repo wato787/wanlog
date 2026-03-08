@@ -21,3 +21,13 @@ run = "bunx oxlint ."
 [tasks.format]
 description = "oxfmt でフォーマット"
 run = "bunx oxfmt ."
+
+[tasks."test:api"]
+description = "API のテスト実行"
+dir = "apps/api"
+run = "bun run test"
+
+[tasks."test:web"]
+description = "Web のテスト実行"
+dir = "apps/web"
+run = "bun run test"
