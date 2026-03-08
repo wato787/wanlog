@@ -14,6 +14,7 @@ import {
   invitations,
 } from "../db/schema";
 import { requireAuth } from "../middleware/auth";
+import { createPostsApp } from "./posts";
 
 const INVITATION_EXPIRES_DAYS = 7;
 
@@ -269,6 +270,8 @@ export function createGroupsApp() {
       201,
     );
   });
+
+  app.route("/:groupId/posts", createPostsApp());
 
   return app;
 }
