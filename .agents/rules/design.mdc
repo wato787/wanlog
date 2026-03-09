@@ -18,25 +18,25 @@ CSS変数として `global.css` で定義して使うこと。
 ```css
 :root {
   /* ベース */
-  --color-bg:         #FDFAF6;  /* クリームがかったオフホワイト */
+  --color-bg:         #F8F7F5;  /* ほぼ白・黄みを極わずかに */
   --color-surface:    #FFFFFF;  /* カード・モーダル背景 */
-  --color-surface-2:  #F5F0E8;  /* 入力欄・サブ背景 */
+  --color-surface-2:  #F0EFED;  /* 入力欄・サブ背景 */
 
-  /* アクセント（テラコッタ） */
-  --color-accent:     #C8684A;  /* メインアクセント */
-  --color-accent-soft:#F2E0D8;  /* アクセントの薄い背景 */
+  /* アクセント（ほぼ黒） */
+  --color-accent:     #1A1916;  /* メインアクセント（黄み極わずかの黒） */
+  --color-accent-soft:#ECEAE7;  /* アクセントの薄い背景 */
 
   /* テキスト */
-  --color-text:       #1A1A1A;  /* メインテキスト */
-  --color-text-sub:   #7A7268;  /* サブテキスト・日付・ラベル */
-  --color-text-muted: #B0A898;  /* プレースホルダー・無効状態 */
+  --color-text:       #1A1916;  /* メインテキスト */
+  --color-text-sub:   #6E6D69;  /* サブテキスト・日付・ラベル */
+  --color-text-muted: #AEACA7;  /* プレースホルダー・無効状態 */
 
   /* ボーダー・区切り */
-  --color-border:     #EDE8DF;  /* 薄いボーダー */
+  --color-border:     #E8E6E3;  /* 薄いボーダー */
 
-  /* ステータス */
-  --color-error:      #D94F3D;
-  --color-success:    #5A9E72;
+  /* ステータス（彩度を極限まで落とす） */
+  --color-error:      #8C3A31;
+  --color-success:    #3A6B4A;
 }
 ```
 
