@@ -1,0 +1,191 @@
+---
+description: わんログのデザインガイド。フロントエンドのUI実装時に必ず参照すること。
+globs: apps/web/**/*.tsx, apps/web/**/*.css
+---
+
+# わんログ デザインガイド
+
+## コンセプト：「やわらかいアルバム」
+
+写真が主役で、UIは邪魔をしない。家族の温かみが自然と伝わるデザイン。
+
+---
+
+## カラーパレット
+
+CSS変数として `global.css` で定義して使うこと。
+
+```css
+:root {
+  /* ベース */
+  --color-bg:         #FDFAF6;  /* クリームがかったオフホワイト */
+  --color-surface:    #FFFFFF;  /* カード・モーダル背景 */
+  --color-surface-2:  #F5F0E8;  /* 入力欄・サブ背景 */
+
+  /* アクセント（テラコッタ） */
+  --color-accent:     #C8684A;  /* メインアクセント */
+  --color-accent-soft:#F2E0D8;  /* アクセントの薄い背景 */
+
+  /* テキスト */
+  --color-text:       #1A1A1A;  /* メインテキスト */
+  --color-text-sub:   #7A7268;  /* サブテキスト・日付・ラベル */
+  --color-text-muted: #B0A898;  /* プレースホルダー・無効状態 */
+
+  /* ボーダー・区切り */
+  --color-border:     #EDE8DF;  /* 薄いボーダー */
+
+  /* ステータス */
+  --color-error:      #D94F3D;
+  --color-success:    #5A9E72;
+}
+```
+
+---
+
+## タイポグラフィ
+
+```css
+/* index.html の <head> に追加 */
+/* <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=DM+Serif+Display&display=swap" rel="stylesheet"> */
+
+:root {
+  --font-sans:  'Noto Sans JP', sans-serif;  /* 日本語・UIテキスト */
+  --font-serif: 'DM Serif Display', serif;   /* アクセント・数字・ロゴ */
+}
+```
+
+### フォントサイズ
+
+```css
+:root {
+  --text-xs:   11px;  /* タイムスタンプ・バッジ */
+  --text-sm:   13px;  /* サブテキスト・ラベル */
+  --text-base: 15px;  /* 本文 */
+  --text-md:   17px;  /* 小見出し */
+  --text-lg:   20px;  /* 見出し */
+  --text-xl:   24px;  /* ページタイトル */
+}
+```
+
+---
+
+## スペーシング
+
+余白は広めに取ること。コンテンツを詰め込まない。
+
+```css
+:root {
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+}
+```
+
+---
+
+## 角丸・シャドウ
+
+ボーダーではなくシャドウで区切る。角丸は大きめ。
+
+```css
+:root {
+  --radius-sm:   8px;
+  --radius-md:   16px;
+  --radius-lg:   24px;
+  --radius-full: 9999px;  /* ピル・アバター */
+
+  --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.10);
+}
+```
+
+---
+
+## コンポーネントルール
+
+### 写真・メディア
+- カード内では横幅いっぱいに表示する（余白なし）
+- `aspect-ratio: 4/3` を基本とする（動画は `16/9`）
+- `object-fit: cover` で必ずトリミング
+- UIクロム（ボタン等）はメディアに重ねず、下に配置する
+
+### カード
+- 背景: `var(--color-surface)`
+- 角丸: `var(--radius-lg)`
+- シャドウ: `var(--shadow-md)`
+- ボーダーは使わない
+- カード間の余白: `var(--space-4)` 以上
+
+### ボタン
+- プライマリ: `var(--color-accent)` 背景、白テキスト、`var(--radius-full)`
+- セカンダリ: `var(--color-surface-2)` 背景、`var(--color-text)` テキスト
+- 最小タップ領域: `44px × 44px`（モバイルファースト）
+- テキストは太字（`font-weight: 700`）
+
+### 入力フォーム
+- 背景: `var(--color-surface-2)`
+- ボーダーなし（フォーカス時のみ `var(--color-accent)` のアウトライン）
+- 角丸: `var(--radius-md)`
+- padding: `var(--space-3)` `var(--space-4)`
+
+### アバター
+- 形状: 円形（`border-radius: var(--radius-full)`）
+- サイズ: 32px（小）/ 40px（中）/ 64px（大）
+
+### FAB（投稿ボタン）
+- 位置: 画面右下固定（`bottom: 24px; right: 20px`）
+- サイズ: `56px × 56px`
+- 背景: `var(--color-accent)`
+- シャドウ: `var(--shadow-lg)`
+
+---
+
+## レイアウト
+
+```css
+:root {
+  --layout-max-width: 480px;  /* スマートフォン最大幅 */
+  --layout-padding:   var(--space-4);  /* 左右の基本余白 */
+  --header-height:    56px;
+  --bottom-nav-height: 60px;
+}
+```
+
+- コンテンツは `max-width: var(--layout-max-width)` で中央寄せ
+- ヘッダーとボトムナビは固定（`position: fixed`）
+- コンテンツエリアに `padding-top: var(--header-height)` と `padding-bottom: var(--bottom-nav-height)` を確保
+
+---
+
+## アニメーション
+
+```css
+:root {
+  --transition-fast:   150ms ease;
+  --transition-base:   250ms ease;
+  --transition-slow:   400ms ease;
+}
+```
+
+- ボタンのホバー・タップ: `transform: scale(0.97)`、`var(--transition-fast)`
+- カードの表示: `fadeSlideUp`（下から20pxフェードイン）
+- 画面遷移: シンプルなフェード（過度なアニメーションは避ける）
+- モーダル・ボトムシート: 下からスライドイン
+
+---
+
+## やってはいけないこと
+
+- 純白（`#FFFFFF`）を背景に使わない → `var(--color-bg)` を使う
+- ボーダーで要素を区切らない → シャドウか余白で区切る
+- アイコンに色をつけすぎない → `var(--color-text-sub)` を基本とする
+- フォントサイズを12px未満にしない（モバイル可読性）
+- タップ領域を44px未満にしない
+- 写真の上にUIを重ねない
