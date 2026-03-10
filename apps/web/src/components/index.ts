@@ -7,3 +7,4 @@ export {
   FieldInput,
 } from "./Field";
 export { Input, type InputProps } from "./Input";
+export { Loading } from "./Loading";

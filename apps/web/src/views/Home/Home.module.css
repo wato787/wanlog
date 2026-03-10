@@ -1,0 +1,17 @@
+.root {
+  max-width: var(--layout-max-width);
+  margin: 0 auto;
+  padding: var(--layout-padding);
+}
+
+.header {
+  margin-bottom: var(--space-6);
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: var(--text-lg);
+  font-weight: 400;
+  color: var(--color-text);
+  margin: 0;
+}
