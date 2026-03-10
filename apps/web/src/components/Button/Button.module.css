@@ -9,7 +9,7 @@
   font-size: var(--text-base);
   font-weight: 700;
   border: none;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-md);
   cursor: pointer;
   transition: transform 0.15s ease;
 }

@@ -50,15 +50,31 @@ function FieldInputComponent(
   );
 }
 
-function FieldErrorComponent({
-  className,
-  ...props
-}: React.ComponentProps<typeof BaseField.Error>) {
+function errorToMessage(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  if (error != null && typeof error === "object" && "message" in error && typeof (error as { message: unknown }).message === "string") {
+    return (error as { message: string }).message;
+  }
+  if (error != null) return String(error);
+  return "エラーが発生しました";
+}
+
+type FieldErrorProps = React.ComponentProps<typeof BaseField.Error> & {
+  /** 渡すと表示の有無とメッセージをここから導出する（match / children は省略可） */
+  error?: unknown;
+};
+
+function FieldErrorComponent({ className, error, match, children, ...props }: FieldErrorProps) {
+  const showByError = error !== undefined && error !== null;
+  const message = error !== undefined && error !== null ? errorToMessage(error) : children;
   return (
     <BaseField.Error
       className={[styles.error, className].filter(Boolean).join(" ")}
+      match={match ?? (showByError ? true : undefined)}
       {...props}
-    />
+    >
+      {message}
+    </BaseField.Error>
   );
 }
 

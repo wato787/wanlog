@@ -31,3 +31,16 @@ export const groupsQueryOptions = {
       },
     }),
 };
+
+export const groupsMutationOptions = {
+  create: () => ({
+    mutationKey: [...queryKeys.groups, "create"] as const,
+    mutationFn: async (name: string) => {
+      const trimmed = name.trim();
+      if (!trimmed) throw new Error("グループ名を入力してください");
+      const res = await api.groups.$post({ json: { name: trimmed } });
+      if (!res.ok) throw new Error("グループの作成に失敗しました");
+      return parseResponse(res);
+    },
+  }),
+};
