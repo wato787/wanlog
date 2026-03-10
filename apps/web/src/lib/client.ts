@@ -4,7 +4,7 @@
 import { hc } from "hono/client";
 import type { AppType } from "@wanlog/api";
 
-function getApiBaseUrl(): string {
+export function getApiBaseUrl(): string {
   const env = import.meta.env?.VITE_API_URL ?? import.meta.env?.VITE_API_ORIGIN;
   if (env && typeof env === "string") return env;
   return "http://localhost:8787";

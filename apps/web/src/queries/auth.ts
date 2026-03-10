@@ -11,5 +11,6 @@ export const authQueryOptions = {
         if (!res.ok) throw new Error("Failed to fetch me");
         return parseResponse(res);
       },
+      retry: false,
     }),
 };
