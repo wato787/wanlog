@@ -2,8 +2,7 @@
   "name": "wanlog",
   "private": true,
   "workspaces": [
-    "apps/*",
-    "packages/*"
+    "apps/*"
   ],
   "scripts": {
     "typecheck": "tsgo -b --noEmit"
