@@ -5,9 +5,11 @@
     "apps/*"
   ],
   "scripts": {
-    "typecheck": "tsgo -b --noEmit"
+    "typecheck": "tsgo -b --noEmit",
+    "dev": "concurrently -n api,web \"bun run --cwd apps/api dev\" \"bun run --cwd apps/web dev\""
   },
   "devDependencies": {
+    "concurrently": "^9.1.2",
     "@typescript/native-preview": "latest",
     "oxfmt": "^0.36.0",
     "oxlint": "^1.51.0"

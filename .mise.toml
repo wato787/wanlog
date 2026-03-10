@@ -3,7 +3,11 @@
 bun = "1.3"
 
 [tasks]
-# 開発サーバー（mise run dev:api / mise run dev:web）
+# 開発サーバー（API + Web を同時起動）
+[tasks.dev]
+description = "API と Web の開発サーバーを同時に起動"
+run = "bun run dev"
+
 [tasks."dev:api"]
 description = "API (Hono) 開発サーバー"
 dir = "apps/api"
