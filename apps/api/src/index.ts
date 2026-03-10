@@ -26,9 +26,11 @@ app.get("/", (c) => {
   return c.text("Hello Hono!");
 });
 
-app.route("/", createAuthApp());
-app.route("/groups", createGroupsApp());
-app.route("/invitations", createInvitationsApp());
-app.route("/uploads", createUploadsApp());
+app
+  .route("/", createAuthApp())
+  .route("/groups", createGroupsApp())
+  .route("/invitations", createInvitationsApp())
+  .route("/uploads", createUploadsApp());
 
+export type AppType = typeof app;
 export default app;

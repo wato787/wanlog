@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsgo -b --noEmit && vite build",
     "preview": "vite preview",
     "deploy": "wrangler pages deploy dist --project-name=wanlog-web",
     "test": "vitest run",
@@ -14,7 +14,8 @@
   "dependencies": {
     "@tanstack/react-query": "^5.90.21",
     "@tanstack/react-router": "^1.166.2",
-    "hono": "^4.12.5",
+    "@wanlog/api-client": "workspace:*",
+    "hono": "^4.12.6",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },
