@@ -43,12 +43,9 @@ async function checkGroupMember(
 }
 
 export function createDogsApp() {
-  const app = new Hono<DogsEnv>();
-
-  app.use("/*", requireAuth);
-
-  // GET / — 犬一覧
-  app.get("/", async (c) => {
+  return new Hono<DogsEnv>()
+    .use("/*", requireAuth)
+    .get("/", async (c) => {
     const groupId = c.req.param("groupId");
     if (!groupId) return c.json({ error: "Bad request" }, 400);
     const userId = c.get("userId");
@@ -70,10 +67,8 @@ export function createDogsApp() {
         createdAt: d.createdAt,
       })),
     });
-  });
-
-  // POST / — 犬登録
-  app.post("/", zValidator("json", createDogSchema), async (c) => {
+  })
+  .post("/", zValidator("json", createDogSchema), async (c) => {
     const groupId = c.req.param("groupId");
     if (!groupId) return c.json({ error: "Bad request" }, 400);
     const userId = c.get("userId");
@@ -110,10 +105,8 @@ export function createDogsApp() {
       },
       201
     );
-  });
-
-  // PATCH /:dogId — 犬プロフィール更新
-  app.patch("/:dogId", zValidator("json", updateDogSchema), async (c) => {
+  })
+  .patch("/:dogId", zValidator("json", updateDogSchema), async (c) => {
     const groupId = c.req.param("groupId");
     const dogId = c.req.param("dogId");
     if (!groupId || !dogId) return c.json({ error: "Bad request" }, 400);
@@ -169,6 +162,4 @@ export function createDogsApp() {
       createdAt: updated!.createdAt,
     });
   });
-
-  return app;
 }

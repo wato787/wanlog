@@ -27,12 +27,9 @@ type GroupsEnv = {
 };
 
 export function createGroupsApp() {
-  const app = new Hono<GroupsEnv>();
-
-  app.use("/*", requireAuth);
-
-  // POST /groups — グループ作成（作成者が owner）
-  app.post("/", zValidator("json", createGroupSchema), async (c) => {
+  return new Hono<GroupsEnv>()
+    .use("/*", requireAuth)
+    .post("/", zValidator("json", createGroupSchema), async (c) => {
     const { name } = c.req.valid("json");
     const userId = c.get("userId");
     const db = drizzle(c.env.DB);
@@ -48,10 +45,8 @@ export function createGroupsApp() {
     });
 
     return c.json({ id, name, createdAt: now }, 201);
-  });
-
-  // GET /groups/:groupId — グループ情報取得（メンバーのみ）
-  app.get("/:groupId", async (c) => {
+  })
+  .get("/:groupId", async (c) => {
     const groupId = c.req.param("groupId");
     const userId = c.get("userId");
     const db = drizzle(c.env.DB);
@@ -77,10 +72,8 @@ export function createGroupsApp() {
       name: group.name,
       createdAt: group.createdAt,
     });
-  });
-
-  // PATCH /groups/:groupId — グループ名変更（owner のみ）
-  app.patch("/:groupId", zValidator("json", updateGroupSchema), async (c) => {
+  })
+  .patch("/:groupId", zValidator("json", updateGroupSchema), async (c) => {
     const groupId = c.req.param("groupId");
     const userId = c.get("userId");
     const { name } = c.req.valid("json");
@@ -105,10 +98,8 @@ export function createGroupsApp() {
     await db.update(groups).set({ name }).where(eq(groups.id, groupId));
 
     return c.json({ id: group.id, name, createdAt: group.createdAt });
-  });
-
-  // GET /groups/:groupId/members — メンバー一覧（メンバーのみ）
-  app.get("/:groupId/members", async (c) => {
+  })
+  .get("/:groupId/members", async (c) => {
     const groupId = c.req.param("groupId");
     const userId = c.get("userId");
     const db = drizzle(c.env.DB);
@@ -136,10 +127,8 @@ export function createGroupsApp() {
       .where(eq(groupMembers.groupId, groupId));
 
     return c.json({ members });
-  });
-
-  // DELETE /groups/:groupId/members/:userId — メンバー削除（owner のみ、自分は削除不可）
-  app.delete("/:groupId/members/:targetUserId", async (c) => {
+  })
+  .delete("/:groupId/members/:targetUserId", async (c) => {
     const groupId = c.req.param("groupId");
     const targetUserId = c.req.param("targetUserId");
     const userId = c.get("userId");
@@ -174,10 +163,8 @@ export function createGroupsApp() {
       .where(and(eq(groupMembers.groupId, groupId), eq(groupMembers.userId, targetUserId)));
 
     return c.json({ ok: true });
-  });
-
-  // POST /groups/:groupId/invitations — 招待トークン発行（owner のみ）
-  app.post("/:groupId/invitations", async (c) => {
+  })
+  .post("/:groupId/invitations", async (c) => {
     const groupId = c.req.param("groupId");
     const userId = c.get("userId");
     const db = drizzle(c.env.DB);
@@ -212,10 +199,7 @@ export function createGroupsApp() {
     });
 
     return c.json({ id, token, groupId, expiresAt }, 201);
-  });
-
-  app.route("/:groupId/posts", createPostsApp());
-  app.route("/:groupId/dogs", createDogsApp());
-
-  return app;
+  })
+  .route("/:groupId/posts", createPostsApp())
+  .route("/:groupId/dogs", createDogsApp());
 }

@@ -13,10 +13,8 @@ type InvitationsEnv = {
 };
 
 export function createInvitationsApp() {
-  const app = new Hono<InvitationsEnv>();
-
-  // GET /invitations/:token — トークン確認（認証不要）
-  app.get("/:token", async (c) => {
+  return new Hono<InvitationsEnv>()
+    .get("/:token", async (c) => {
     const token = c.req.param("token");
     const db = drizzle(c.env.DB);
 
@@ -55,10 +53,8 @@ export function createInvitationsApp() {
       groupName: inv.groupName,
       expiresAt: inv.expiresAt,
     });
-  });
-
-  // POST /invitations/:token/join — グループ参加（認証必須）
-  app.post("/:token/join", requireAuth, async (c) => {
+  })
+  .post("/:token/join", requireAuth, async (c) => {
     const token = c.req.param("token");
     const userId = c.get("userId");
     const db = drizzle(c.env.DB);
@@ -97,6 +93,4 @@ export function createInvitationsApp() {
 
     return c.json({ ok: true, groupId: inv.groupId }, 201);
   });
-
-  return app;
 }

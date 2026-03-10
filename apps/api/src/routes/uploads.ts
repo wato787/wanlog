@@ -44,12 +44,9 @@ type UploadsEnv = {
 const DEFAULT_BUCKET_NAME = "wanlog-media";
 
 export function createUploadsApp() {
-  const app = new Hono<UploadsEnv>();
-
-  app.use("/*", requireAuth);
-
-  // POST /uploads/presigned-url — 複数ファイル用 presigned PUT URL 発行
-  app.post("/presigned-url", zValidator("json", requestSchema), async (c) => {
+  return new Hono<UploadsEnv>()
+    .use("/*", requireAuth)
+    .post("/presigned-url", zValidator("json", requestSchema), async (c) => {
     const userId = c.get("userId");
     const { files } = c.req.valid("json");
     const {
@@ -89,6 +86,4 @@ export function createUploadsApp() {
 
     return c.json({ urls });
   });
-
-  return app;
 }

@@ -38,12 +38,9 @@ async function checkPostAccess(
 }
 
 export function createRepliesApp() {
-  const app = new Hono<RepliesEnv>();
-
-  app.use("/*", requireAuth);
-
-  // GET / — リプライ一覧
-  app.get("/", async (c) => {
+  return new Hono<RepliesEnv>()
+    .use("/*", requireAuth)
+    .get("/", async (c) => {
     const postId = c.req.param("postId");
     if (!postId) return c.json({ error: "Bad request" }, 400);
     const userId = c.get("userId");
@@ -79,10 +76,8 @@ export function createRepliesApp() {
         author: { displayName: r.displayName, avatarUrl: r.avatarUrl },
       })),
     });
-  });
-
-  // POST / — リプライ投稿
-  app.post("/", zValidator("json", createReplySchema), async (c) => {
+  })
+  .post("/", zValidator("json", createReplySchema), async (c) => {
     const postId = c.req.param("postId");
     if (!postId) return c.json({ error: "Bad request" }, 400);
     const userId = c.get("userId");
@@ -125,10 +120,8 @@ export function createRepliesApp() {
       },
       201
     );
-  });
-
-  // DELETE /:replyId — リプライ削除（自分のみ）
-  app.delete("/:replyId", async (c) => {
+  })
+  .delete("/:replyId", async (c) => {
     const postId = c.req.param("postId");
     const replyId = c.req.param("replyId");
     if (!postId || !replyId) return c.json({ error: "Bad request" }, 400);
@@ -158,6 +151,4 @@ export function createRepliesApp() {
 
     return c.json({ ok: true });
   });
-
-  return app;
 }

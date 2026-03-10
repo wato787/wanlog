@@ -39,12 +39,9 @@ type PostsEnv = {
 };
 
 export function createPostsApp() {
-  const app = new Hono<PostsEnv>();
-
-  app.use("/*", requireAuth);
-
-  // POST / — 投稿作成（post_media も同時作成）
-  app.post("/", zValidator("json", createPostSchema), async (c) => {
+  return new Hono<PostsEnv>()
+    .use("/*", requireAuth)
+    .post("/", zValidator("json", createPostSchema), async (c) => {
     const groupId = c.req.param("groupId");
     if (!groupId) return c.json({ error: "Bad request" }, 400);
     const userId = c.get("userId");
@@ -109,10 +106,8 @@ export function createPostsApp() {
       },
       201
     );
-  });
-
-  // GET / — タイムライン（cursor-based pagination）
-  app.get("/", zValidator("query", listPostsSchema), async (c) => {
+  })
+  .get("/", zValidator("query", listPostsSchema), async (c) => {
     const groupId = c.req.param("groupId");
     if (!groupId) return c.json({ error: "Bad request" }, 400);
     const userId = c.get("userId");
@@ -213,10 +208,8 @@ export function createPostsApp() {
       items: postsWithMedia,
       nextCursor: hasMore ? nextCursor : undefined,
     });
-  });
-
-  // GET /:postId — 投稿詳細
-  app.get("/:postId", async (c) => {
+  })
+  .get("/:postId", async (c) => {
     const groupId = c.req.param("groupId");
     const postId = c.req.param("postId");
     if (!groupId || !postId) return c.json({ error: "Bad request" }, 400);
@@ -280,10 +273,8 @@ export function createPostsApp() {
       })),
       replyCount: Number(replyCount?.count ?? 0),
     });
-  });
-
-  // DELETE /:postId — 投稿削除（post_media も削除）
-  app.delete("/:postId", async (c) => {
+  })
+  .delete("/:postId", async (c) => {
     const groupId = c.req.param("groupId");
     const postId = c.req.param("postId");
     if (!groupId || !postId) return c.json({ error: "Bad request" }, 400);
@@ -309,9 +300,6 @@ export function createPostsApp() {
     await db.delete(posts).where(eq(posts.id, postId));
 
     return c.json({ ok: true });
-  });
-
-  app.route("/:postId/replies", createRepliesApp());
-
-  return app;
+  })
+  .route("/:postId/replies", createRepliesApp());
 }
