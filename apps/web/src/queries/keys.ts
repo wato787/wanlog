@@ -7,6 +7,7 @@ export const queryKeys = {
   authMe: () => [...queryKeys.auth, "me"] as const,
 
   groups: ["groups"] as const,
+  groupsList: () => [...queryKeys.groups, "list"] as const,
   groupDetail: (groupId: string) => [...queryKeys.groups, "detail", groupId] as const,
   groupMembers: (groupId: string) => [...queryKeys.groups, "members", groupId] as const,
 

@@ -3,6 +3,15 @@ import { api, parseResponse } from "../lib/api";
 import { queryKeys } from "./keys";
 
 export const groupsQueryOptions = {
+  list: () =>
+    queryOptions({
+      queryKey: queryKeys.groupsList(),
+      queryFn: async () => {
+        const res = await api.groups.$get();
+        if (!res.ok) throw new Error("Failed to fetch groups");
+        return parseResponse(res);
+      },
+    }),
   detail: (groupId: string) =>
     queryOptions({
       queryKey: queryKeys.groupDetail(groupId),

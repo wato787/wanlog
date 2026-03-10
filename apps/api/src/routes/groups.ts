@@ -29,6 +29,22 @@ type GroupsEnv = {
 export function createGroupsApp() {
   return new Hono<GroupsEnv>()
     .use("/*", requireAuth)
+    .get("/", async (c) => {
+      const userId = c.get("userId");
+      const db = drizzle(c.env.DB);
+
+      const list = await db
+        .select({
+          id: groups.id,
+          name: groups.name,
+          createdAt: groups.createdAt,
+        })
+        .from(groupMembers)
+        .innerJoin(groups, eq(groupMembers.groupId, groups.id))
+        .where(eq(groupMembers.userId, userId));
+
+      return c.json({ groups: list });
+    })
     .post("/", zValidator("json", createGroupSchema), async (c) => {
     const { name } = c.req.valid("json");
     const userId = c.get("userId");

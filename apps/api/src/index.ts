@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { cors } from "hono/cors";
 import { createAuthApp } from "./auth";
 import { createGroupsApp } from "./routes/groups";
 import { createInvitationsApp } from "./routes/invitations";
@@ -21,6 +22,18 @@ export type Bindings = {
 export type Variables = { userId: string };
 
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>()
+  .use("*", async (c, next) => {
+    const handler = cors({
+      origin: c.env.FRONTEND_ORIGIN,
+      credentials: true,
+      allowMethods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+      allowHeaders: ["Content-Type", "Authorization"],
+    });
+    return (handler as (c: unknown, next: () => Promise<void>) => Promise<Response | void>)(
+      c,
+      next
+    );
+  })
   .get("/", (c) => c.text("Hello Hono!"))
   .route("/auth", createAuthApp())
   .route("/groups", createGroupsApp())

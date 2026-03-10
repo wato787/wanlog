@@ -5,7 +5,12 @@
 LINE_CHANNEL_ID=
 LINE_CHANNEL_SECRET=
 JWT_SECRET=
+# API のオリジン（LINE に登録する Callback URL のベース）
+# → LINE Developers: チャネル → LINE Login → Callback URL に
+#    https://あなたのAPIドメイン/auth/line/callback を登録すること。
+#    ローカルなら http://localhost:8787/auth/line/callback
 API_ORIGIN=http://localhost:8787
+# ログイン後にリダイレクトするフロントのオリジン（ルート / が開く）
 FRONTEND_ORIGIN=http://localhost:5173
 
 # R2 presigned URL 用（Dashboard → R2 → Manage R2 API Tokens で発行）

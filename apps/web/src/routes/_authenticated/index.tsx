@@ -1,10 +1,18 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { api } from "../../lib/api";
 import { queryKeys } from "../../queries";
+import { groupsQueryOptions } from "../../queries";
 import styles from "./index.module.css";
 
 export const Route = createFileRoute("/_authenticated/")({
+  beforeLoad: async ({ context }) => {
+    const data = await context.queryClient.fetchQuery(groupsQueryOptions.list());
+    if (data.groups.length === 0) {
+      throw redirect({ to: "/onboarding" as "/onboarding" });
+    }
+    return {};
+  },
   component: HomePage,
 });
 
