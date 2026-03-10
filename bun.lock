@@ -35,7 +35,7 @@
       "dependencies": {
         "@tanstack/react-query": "^5.90.21",
         "@tanstack/react-router": "^1.166.2",
-        "@wanlog/api-client": "workspace:*",
+        "@wanlog/api": "workspace:*",
         "hono": "^4.12.6",
         "react": "^19.2.4",
         "react-dom": "^19.2.4",
@@ -53,22 +53,6 @@
         "vitest": "^4.0.18",
         "wrangler": "^4.71.0",
       },
-    },
-    "packages/api-client": {
-      "name": "@wanlog/api-client",
-      "version": "0.0.0",
-      "dependencies": {
-        "@wanlog/api": "workspace:*",
-        "hono": "^4.12.6",
-      },
-      "devDependencies": {
-        "@cloudflare/workers-types": "^4.20260307.1",
-        "typescript": "~5.9.3",
-      },
-    },
-    "packages/types": {
-      "name": "@wanlog/types",
-      "version": "0.0.0",
     },
   },
   "packages": {
@@ -503,10 +487,6 @@
     "@vitest/utils": ["@vitest/utils@4.0.18", "", { "dependencies": { "@vitest/pretty-format": "4.0.18", "tinyrainbow": "^3.0.3" } }, "sha512-msMRKLMVLWygpK3u2Hybgi4MNjcYJvwTb0Ru09+fOyCXIgT5raYP041DRRdiJiI3k/2U6SEbAETB3YtBrUkCFA=="],
 
     "@wanlog/api": ["@wanlog/api@workspace:apps/api"],
-
-    "@wanlog/api-client": ["@wanlog/api-client@workspace:packages/api-client"],
-
-    "@wanlog/types": ["@wanlog/types@workspace:packages/types"],
 
     "@wanlog/web": ["@wanlog/web@workspace:apps/web"],
 
