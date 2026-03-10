@@ -2,6 +2,10 @@ name = "wanlog-api"
 main = "src/index.ts"
 compatibility_date = "2026-03-08"
 
+# 開発サーバーは 8787 で固定（Web のデフォルトと合わせる）
+[dev]
+port = 8787
+
 # D1（SQLite）
 [[d1_databases]]
 binding = "DB"

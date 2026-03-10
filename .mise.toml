@@ -3,10 +3,10 @@
 bun = "1.3"
 
 [tasks]
-# 開発サーバー（API + Web を同時起動）
+# 開発サーバー（API + Web を同時起動。既に 8787/5173 を使っているプロセスは kill する）
 [tasks.dev]
 description = "API と Web の開発サーバーを同時に起動"
-run = "bun run dev"
+run = "lsof -ti :8787 | xargs kill -9 2>/dev/null; lsof -ti :5173 | xargs kill -9 2>/dev/null; bun run dev"
 
 [tasks."dev:api"]
 description = "API (Hono) 開発サーバー"
