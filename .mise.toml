@@ -14,6 +14,10 @@ description = "Web (Vite) 開発サーバー"
 dir = "apps/web"
 run = "bun run dev"
 
+[tasks.typecheck]
+description = "tsgo で型チェック（モノレポ全体）"
+run = "bun run typecheck"
+
 [tasks.lint]
 description = "oxlint でリント"
 run = "bunx oxlint ."
@@ -41,6 +45,11 @@ run = "bun run db:generate"
 description = "ローカル D1 にマイグレーション適用"
 dir = "apps/api"
 run = "bun run db:migrate:local"
+
+[tasks."build:web"]
+description = "Web をビルド（tsgo 型チェック + Vite）"
+dir = "apps/web"
+run = "bun run build"
 
 [tasks."deploy:web"]
 description = "Web を Cloudflare Pages にデプロイ"
