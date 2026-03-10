@@ -20,14 +20,9 @@ export type Bindings = {
 
 export type Variables = { userId: string };
 
-const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
-
-app.get("/", (c) => {
-  return c.text("Hello Hono!");
-});
-
-app
-  .route("/", createAuthApp())
+const app = new Hono<{ Bindings: Bindings; Variables: Variables }>()
+  .get("/", (c) => c.text("Hello Hono!"))
+  .route("/auth", createAuthApp())
   .route("/groups", createGroupsApp())
   .route("/invitations", createInvitationsApp())
   .route("/uploads", createUploadsApp());

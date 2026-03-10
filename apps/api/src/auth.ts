@@ -36,7 +36,7 @@ export function createAuthApp() {
   }>();
 
   // LINE 認証 URL へリダイレクト（state を cookie に保存）
-  app.get("/auth/line", (c) => {
+  app.get("/line", (c) => {
     const state = crypto.randomUUID();
     const redirectUri = c.env.API_ORIGIN + "/auth/line/callback";
     const params = new URLSearchParams({
@@ -58,7 +58,7 @@ export function createAuthApp() {
   });
 
   // LINE コールバック（GET: ブラウザが code/state 付きでリダイレクトされる）
-  app.get("/auth/line/callback", async (c) => {
+  app.get("/line/callback", async (c) => {
     const code = c.req.query("code");
     const state = c.req.query("state");
     const stateCookie = getCookie(c, STATE_COOKIE_NAME);
@@ -149,7 +149,7 @@ export function createAuthApp() {
   });
 
   // ログインユーザー情報取得
-  app.get("/auth/me", requireAuth, async (c) => {
+  app.get("/me", requireAuth, async (c) => {
     const db = drizzle(c.env.DB);
     const [user] = await db
       .select()
@@ -167,7 +167,7 @@ export function createAuthApp() {
   });
 
   // ログアウト（Cookie 削除）
-  app.post("/auth/logout", (c) => {
+  app.post("/logout", (c) => {
     deleteCookie(c, COOKIE_NAME);
     return c.json({ ok: true });
   });
