@@ -28,28 +28,49 @@
   line-height: 1.6;
 }
 
+/* LINE Login ボタン（LINE 公式ガイドライン準拠）
+   https://developers.line.biz/en/docs/line-login/login-button/
+   - Base: #06C755, Font/Logo: #FFFFFF
+   - アイコンは公式テンプレートから取得したものを /line.png に配置すること */
 .lineButton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 10px;
   min-height: 44px;
   min-width: 44px;
   padding: var(--space-3) var(--space-8);
-  background: var(--color-accent);
-  color: var(--color-surface);
+  background: #06c755;
+  color: #ffffff;
   font-family: var(--font-sans);
   font-size: var(--text-base);
   font-weight: 700;
   text-decoration: none;
-  border-radius: var(--radius-full);
+  border: none;
+  border-radius: 4px;
   box-shadow: var(--shadow-md);
-  transition: transform var(--transition-fast);
+  transition: background-color 0.2s ease;
 }
 
 .lineButton:hover {
-  transform: scale(0.98);
+  /* ガイドライン: Base + #000000 opacity 10% */
+  background: color-mix(in srgb, #06c755 90%, black);
 }
 
 .lineButton:active {
-  transform: scale(0.97);
+  /* ガイドライン: Base + #000000 opacity 30% */
+  background: color-mix(in srgb, #06c755 70%, black);
+}
+
+.lineButtonIcon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  background: url("/line.png") center / contain no-repeat;
+  transition: background-image 0.2s ease;
+}
+
+.lineButton:hover .lineButtonIcon,
+.lineButton:active .lineButtonIcon {
+  background-image: url("/line-hover.png");
 }

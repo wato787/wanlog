@@ -1,5 +1,7 @@
 /**
  * 未ログイン時に表示するログイン画面（LINE OAuth 入口）
+ * LINE Login ボタンは公式ガイドラインに準拠:
+ * https://developers.line.biz/en/docs/line-login/login-button/
  */
 import { getApiBaseUrl } from "../../lib/client";
 import styles from "./Login.module.css";
@@ -21,6 +23,7 @@ export function Login() {
           className={styles.lineButton}
           aria-label="LINEでログイン"
         >
+          <span className={styles.lineButtonIcon} aria-hidden />
           LINEでログイン
         </a>
       </div>
