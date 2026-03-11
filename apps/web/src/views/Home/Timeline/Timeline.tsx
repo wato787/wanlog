@@ -20,6 +20,8 @@ export function Timeline({ group }: { group: Group }) {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    isError,
+    error,
   } = useSuspenseInfiniteQuery(OPTIONS(group.id));
 
   useEffect(() => {
@@ -31,7 +33,14 @@ export function Timeline({ group }: { group: Group }) {
   const items = data.pages.flatMap((p): PostListItem[] => p.items);
 
   if (!items.length) {
-    return <p className={styles.empty}>まだ投稿がありません</p>;
+    return (
+      <div className={styles.empty}>
+        <p className={styles.emptyText}>まだ投稿がありません</p>
+        <Link to="/posts/new" className={styles.emptyCta}>
+          最初の投稿を作成
+        </Link>
+      </div>
+    );
   }
 
   return (
@@ -62,9 +71,22 @@ export function Timeline({ group }: { group: Group }) {
       {/* 下端センチネル: ここが画面に入ったら fetchNextPage（公式例と同じパターン） */}
       {hasNextPage ? (
         <div ref={ref} className={styles.sentinel} aria-hidden>
-          {isFetchingNextPage && (
+          {isError ? (
+            <div className={styles.errorNext}>
+              <p className={styles.errorNextText}>
+                {error instanceof Error ? error.message : "読み込みに失敗しました"}
+              </p>
+              <button
+                type="button"
+                className={styles.retryButton}
+                onClick={() => fetchNextPage()}
+              >
+                再試行
+              </button>
+            </div>
+          ) : isFetchingNextPage ? (
             <p className={styles.loadingMore}>読み込み中…</p>
-          )}
+          ) : null}
         </div>
       ) : null}
     </>
