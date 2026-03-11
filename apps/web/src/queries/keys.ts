@@ -14,6 +14,8 @@ export const queryKeys = {
   posts: (groupId: string) => ["groups", groupId, "posts"] as const,
   postList: (groupId: string, cursor?: string) =>
     [...queryKeys.posts(groupId), "list", cursor ?? "initial"] as const,
+  postListInfinite: (groupId: string) =>
+    [...queryKeys.posts(groupId), "list", "infinite"] as const,
   postDetail: (groupId: string, postId: string) =>
     [...queryKeys.posts(groupId), "detail", postId] as const,
 };

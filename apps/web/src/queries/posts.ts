@@ -2,6 +2,16 @@ import { queryOptions } from "@tanstack/react-query";
 import { api, parseResponse } from "../lib/api";
 import { queryKeys } from "./keys";
 
+const POSTS_PAGE_LIMIT = 20;
+
+export type PostListItem = {
+  id: string;
+  caption: string | null;
+  media: { id: string; mediaUrl: string; mediaType: string; order: number }[];
+  author: { displayName: string; avatarUrl: string | null };
+  replyCount: number;
+};
+
 export const postsQueryOptions = {
   list: (groupId: string, opts?: { cursor?: string; limit?: number }) =>
     queryOptions({
@@ -18,6 +28,24 @@ export const postsQueryOptions = {
         return parseResponse(res);
       },
     }),
+  listInfinite: (groupId: string) => ({
+    queryKey: queryKeys.postListInfinite(groupId),
+    queryFn: async ({ pageParam }: { pageParam: string | undefined }) => {
+      const res = await api.groups[":groupId"].posts.$get({
+        param: { groupId },
+        query: {
+          cursor: pageParam,
+          limit: String(POSTS_PAGE_LIMIT),
+        },
+      });
+      if (!res.ok) throw new Error("Failed to fetch posts");
+      const data = await parseResponse(res);
+      return data as { items: PostListItem[]; nextCursor?: string };
+    },
+    initialPageParam: undefined as string | undefined,
+    getNextPageParam: (lastPage: { nextCursor?: string }) =>
+      lastPage.nextCursor ?? undefined,
+  }),
   detail: (groupId: string, postId: string) =>
     queryOptions({
       queryKey: queryKeys.postDetail(groupId, postId),

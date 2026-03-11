@@ -51,6 +51,18 @@
   color: var(--color-text-sub);
 }
 
+.sentinel {
+  min-height: 1px;
+  padding: var(--space-4);
+}
+
+.loadingMore {
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--color-text-sub);
+  margin: 0;
+}
+
 .loading {
   text-align: center;
   padding: var(--space-8);

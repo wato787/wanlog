@@ -12,8 +12,8 @@ export const Route = createFileRoute("/_authenticated/")({
   },
   loader: async ({ context }) => {
     if (!context.group) return;
-    await context.queryClient.ensureQueryData(
-      postsQueryOptions.list(context.group.id)
+    await context.queryClient.prefetchInfiniteQuery(
+      postsQueryOptions.listInfinite(context.group.id)
     );
   },
   component: HomePage,
