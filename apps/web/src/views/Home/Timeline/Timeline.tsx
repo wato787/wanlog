@@ -1,4 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
 import { postsQueryOptions } from "../../../queries";
 import styles from "./Timeline.module.css";
 
@@ -21,21 +22,23 @@ export function Timeline({ group }: { group: Group }) {
     <ul className={styles.list} aria-label="投稿一覧">
       {postsData.items.map((post) => (
         <li key={post.id} className={styles.card}>
-          {post.media?.[0] && (
-            <img
-              src={post.media[0].mediaUrl}
-              alt=""
-              className={styles.media}
-            />
-          )}
-          <div className={styles.body}>
-            {post.caption && (
-              <p className={styles.caption}>{post.caption}</p>
+          <Link to="/posts/$postId" params={{ postId: post.id }} className={styles.cardLink}>
+            {post.media?.[0] && (
+              <img
+                src={post.media[0].mediaUrl}
+                alt=""
+                className={styles.media}
+              />
             )}
-            <p className={styles.meta}>
-              {post.author.displayName ?? "不明"} · コメント {post.replyCount}
-            </p>
-          </div>
+            <div className={styles.body}>
+              {post.caption && (
+                <p className={styles.caption}>{post.caption}</p>
+              )}
+              <p className={styles.meta}>
+                {post.author.displayName ?? "不明"} · コメント {post.replyCount}
+              </p>
+            </div>
+          </Link>
         </li>
       ))}
     </ul>

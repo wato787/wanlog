@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
 import { Route as AuthenticatedPostsNewRouteImport } from './routes/_authenticated/posts/new'
+import { Route as AuthenticatedPostsPostIdRouteImport } from './routes/_authenticated/posts/$postId'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -39,17 +40,25 @@ const AuthenticatedPostsNewRoute = AuthenticatedPostsNewRouteImport.update({
   path: '/posts/new',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedPostsPostIdRoute =
+  AuthenticatedPostsPostIdRouteImport.update({
+    id: '/posts/$postId',
+    path: '/posts/$postId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/login': typeof LoginRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/posts/$postId': typeof AuthenticatedPostsPostIdRoute
   '/posts/new': typeof AuthenticatedPostsNewRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/': typeof AuthenticatedIndexRoute
+  '/posts/$postId': typeof AuthenticatedPostsPostIdRoute
   '/posts/new': typeof AuthenticatedPostsNewRoute
 }
 export interface FileRoutesById {
@@ -58,19 +67,21 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/posts/$postId': typeof AuthenticatedPostsPostIdRoute
   '/_authenticated/posts/new': typeof AuthenticatedPostsNewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/onboarding' | '/posts/new'
+  fullPaths: '/' | '/login' | '/onboarding' | '/posts/$postId' | '/posts/new'
   fileRoutesByTo: FileRoutesByTo
-  to: '/login' | '/onboarding' | '/' | '/posts/new'
+  to: '/login' | '/onboarding' | '/' | '/posts/$postId' | '/posts/new'
   id:
     | '__root__'
     | '/_authenticated'
     | '/login'
     | '/_authenticated/onboarding'
     | '/_authenticated/'
+    | '/_authenticated/posts/$postId'
     | '/_authenticated/posts/new'
   fileRoutesById: FileRoutesById
 }
@@ -116,18 +127,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPostsNewRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/posts/$postId': {
+      id: '/_authenticated/posts/$postId'
+      path: '/posts/$postId'
+      fullPath: '/posts/$postId'
+      preLoaderRoute: typeof AuthenticatedPostsPostIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
 interface AuthenticatedRouteChildren {
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedPostsPostIdRoute: typeof AuthenticatedPostsPostIdRoute
   AuthenticatedPostsNewRoute: typeof AuthenticatedPostsNewRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedPostsPostIdRoute: AuthenticatedPostsPostIdRoute,
   AuthenticatedPostsNewRoute: AuthenticatedPostsNewRoute,
 }
 
