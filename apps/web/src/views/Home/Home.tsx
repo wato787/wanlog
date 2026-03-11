@@ -3,9 +3,11 @@
  */
 import { Suspense } from "react";
 import { useRouteContext } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { Loading } from "../../components";
 import { Timeline } from "./Timeline/Timeline";
 import type { RouterContext } from "../../routes/__root";
+import type { FileRouteTypes } from "../../routeTree.gen";
 import styles from "./Home.module.css";
 
 export function Home() {
@@ -20,6 +22,15 @@ export function Home() {
         <Suspense fallback={<Loading />}>
           <Timeline group={group} />
         </Suspense>
+      ) : null}
+      {group ? (
+        <Link
+          to={"/posts/new" as FileRouteTypes["fullPaths"]}
+          className={styles.fab}
+          aria-label="新規投稿"
+        >
+          ＋
+        </Link>
       ) : null}
     </div>
   );

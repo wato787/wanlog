@@ -15,3 +15,31 @@
   color: var(--color-text);
   margin: 0;
 }
+
+.fab {
+  position: fixed;
+  right: var(--layout-padding);
+  bottom: var(--space-8);
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-accent);
+  color: var(--color-surface);
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-lg);
+  text-decoration: none;
+  transition: transform 0.15s ease;
+}
+
+.fab:hover {
+  transform: scale(1.05);
+}
+
+.fab:active {
+  transform: scale(0.98);
+}
