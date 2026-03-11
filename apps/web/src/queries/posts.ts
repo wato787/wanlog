@@ -49,4 +49,14 @@ export const postsMutationOptions = {
       return parseResponse(res);
     },
   }),
+  delete: (groupId: string, postId: string) => ({
+    mutationKey: [...queryKeys.posts(groupId), "delete", postId] as const,
+    mutationFn: async () => {
+      const res = await api.groups[":groupId"].posts[":postId"].$delete({
+        param: { groupId, postId },
+      });
+      if (!res.ok) throw new Error("削除に失敗しました");
+      return parseResponse(res);
+    },
+  }),
 };

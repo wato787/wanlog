@@ -70,6 +70,10 @@
   color: var(--color-text-sub);
 }
 
+.actions {
+  margin-top: var(--space-4);
+}
+
 .notFound {
   text-align: center;
   padding: var(--space-12);
