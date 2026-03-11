@@ -17,6 +17,15 @@ export function Home() {
     <div className={styles.root}>
       <header className={styles.header}>
         <h1 className={styles.title}>わんログ</h1>
+        {group ? (
+          <Link
+            to="/settings"
+            className={styles.settingsLink}
+            aria-label="設定"
+          >
+            設定
+          </Link>
+        ) : null}
       </header>
       {group ? (
         <Suspense fallback={<Loading />}>

@@ -5,7 +5,21 @@
 }
 
 .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: var(--space-6);
+}
+
+.settingsLink {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-text-sub);
+  text-decoration: none;
+}
+
+.settingsLink:hover {
+  color: var(--color-text);
 }
 
 .title {

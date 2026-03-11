@@ -43,4 +43,17 @@ export const groupsMutationOptions = {
       return parseResponse(res);
     },
   }),
+  update: (groupId: string) => ({
+    mutationKey: [...queryKeys.groups, "update", groupId] as const,
+    mutationFn: async (name: string) => {
+      const trimmed = name.trim();
+      if (!trimmed) throw new Error("グループ名を入力してください");
+      const res = await api.groups[":groupId"].$patch({
+        param: { groupId },
+        json: { name: trimmed },
+      });
+      if (!res.ok) throw new Error("グループ名の変更に失敗しました");
+      return parseResponse(res);
+    },
+  }),
 };
