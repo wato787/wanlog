@@ -7,3 +7,8 @@ export {
   type CreatePostPayload,
   type PostListItem,
 } from "./posts";
+export {
+  repliesQueryOptions,
+  repliesMutationOptions,
+  type ReplyItem,
+} from "./replies";
