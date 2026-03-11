@@ -30,3 +30,23 @@ export const postsQueryOptions = {
       },
     }),
 };
+
+export type CreatePostPayload = {
+  caption?: string;
+  takenAt?: number;
+  media: { key: string; mediaType: "photo" | "video" }[];
+};
+
+export const postsMutationOptions = {
+  create: (groupId: string) => ({
+    mutationKey: [...queryKeys.posts(groupId), "create"] as const,
+    mutationFn: async (payload: CreatePostPayload) => {
+      const res = await api.groups[":groupId"].posts.$post({
+        param: { groupId },
+        json: payload,
+      });
+      if (!res.ok) throw new Error("投稿に失敗しました");
+      return parseResponse(res);
+    },
+  }),
+};

@@ -24,7 +24,7 @@ const createPostSchema = z.object({
         mediaType: z.enum(["photo", "video"]),
       })
     )
-    .min(1)
+    .min(0)
     .max(10),
 });
 
@@ -46,6 +46,11 @@ export function createPostsApp() {
     if (!groupId) return c.json({ error: "Bad request" }, 400);
     const userId = c.get("userId");
     const { caption, takenAt, media } = c.req.valid("json");
+    const hasText = caption != null && caption.trim().length > 0;
+    const hasMedia = media != null && media.length > 0;
+    if (!hasText && !hasMedia) {
+      return c.json({ error: "本文かメディアのいずれかが必要です" }, 400);
+    }
     const db = drizzle(c.env.DB);
 
     const [member] = await db
@@ -70,12 +75,13 @@ export function createPostsApp() {
       createdAt: now,
     });
 
-    for (let i = 0; i < media.length; i++) {
+    for (let i = 0; i < (media ?? []).length; i++) {
+      const m = media![i];
       await db.insert(postMedia).values({
         id: uuidv7(),
         postId,
-        mediaUrl: media[i].key,
-        mediaType: media[i].mediaType,
+        mediaUrl: m.key,
+        mediaType: m.mediaType,
         order: i,
         createdAt: now,
       });
