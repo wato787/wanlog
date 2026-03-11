@@ -14,3 +14,14 @@ export const authQueryOptions = {
       retry: false,
     }),
 };
+
+export const authMutationOptions = {
+  logout: () => ({
+    mutationKey: [...queryKeys.auth, "logout"] as const,
+    mutationFn: async () => {
+      const res = await api.auth.logout.$post();
+      if (!res.ok) throw new Error("ログアウトに失敗しました");
+      return parseResponse(res);
+    },
+  }),
+};
